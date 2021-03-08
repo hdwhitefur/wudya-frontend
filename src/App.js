@@ -2,7 +2,10 @@ import React, { Component, Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Create from './components/Create';
+import Home from './components/Home';
+import About from './components/About';
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 class App extends Component {
   constructor(props) {
@@ -14,12 +17,13 @@ class App extends Component {
 
   render() {
     return (
-      <Fragment>
+      <Router>
+
         <Navbar color="light" light expand="md">
-          <NavbarBrand>Wudya</NavbarBrand>
+          <NavbarBrand href="/">Wudya</NavbarBrand>
           <Nav className="me-uato" navbar>
             <NavItem>
-              <NavLink>Create</NavLink>
+              <NavLink href="/create">Create</NavLink>
             </NavItem>
             <NavItem>
               <NavLink>Random</NavLink>
@@ -27,11 +31,25 @@ class App extends Component {
             <NavItem>
               <NavLink>Gauntlet</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink href="/about">About</NavLink>
+            </NavItem>
           </Nav>
-          <NavLink>About</NavLink>
         </Navbar>
-        <Create />
-      </Fragment>
+
+        <Switch>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/create">
+            <Create />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+        
+      </Router>
     )
   }
 }
