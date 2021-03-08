@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Create from './components/Create';
+import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +14,24 @@ class App extends Component {
 
   render() {
     return (
-      <Create />
+      <Fragment>
+        <Navbar color="light" light expand="md">
+          <NavbarBrand>Wudya</NavbarBrand>
+          <Nav className="me-uato" navbar>
+            <NavItem>
+              <NavLink>Create</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink>Random</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink>Gauntlet</NavLink>
+            </NavItem>
+          </Nav>
+          <NavLink>About</NavLink>
+        </Navbar>
+        <Create />
+      </Fragment>
     )
   }
 }
