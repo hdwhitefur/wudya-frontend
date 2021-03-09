@@ -17,13 +17,15 @@ const Wudya = (props) => {
             .catch((err) => console.log(err));
     }, []);
 
-    //This logic should maybe be handled on the backend
+    //Bad, should be handled on backend rather than providing new vote count
     const vote = (votes) => {
         axios({
             method: 'put',
             url: `/api/optionpairs/${optionPair.id}/`,
             data: {
                 desc: optionPair.desc,
+                prompt_a: optionPair.prompt_a,
+                prompt_b: optionPair.prompt_b,
                 votes_a: optionPair.votes_a + votes[0],
                 votes_b: optionPair.votes_b + votes[1]
             }
