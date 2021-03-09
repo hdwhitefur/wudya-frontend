@@ -4,29 +4,49 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const Wudya = (props) => {
-    const [optionPairs, setOptionPairs] = useState([]);
+    const [optionPair, setOptionPair] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const { id } = useParams();
 
     useEffect(() => {
         axios.get("/api/optionpairs/" + id)
             .then((res) => {
-                setOptionPairs(res.data);
+                setOptionPair(res.data);
                 setLoaded(true);
             })
             .catch((err) => console.log(err));
-    });
+    }, []);
+
+    //This logic should maybe be handled on the backend
+    const vote = (votes) => {
+        axios({
+            method: 'put',
+            url: `/api/optionpairs/${optionPair.id}/`,
+            data: {
+                desc: optionPair.desc,
+                votes_a: optionPair.votes_a + votes[0],
+                votes_b: optionPair.votes_b + votes[1]
+            }
+        }).then((res) => {
+            //useHistory().push("/wudya/#/results")
+            console.log(res)
+        });
+    }
 
     return (
         <Jumbotron>
             <Container>
                 <Row>
                     <Col xs="3">
-                        <Button>{optionPairs.prompt_a.prompt}</Button>
+                        <Button onClick={() => vote([1, 0])}>
+                            {loaded ? optionPair.prompt_a.prompt : ""}
+                        </Button>
                     </Col>
                     <Col xs="auto">vs.</Col>
                     <Col xs="3">
-                        <Button>{optionPairs.prompt_b.prompt}</Button>
+                        <Button onClick={() => vote([0, 1])}>
+                            {loaded ? optionPair.prompt_b.prompt : ""}
+                        </Button>
                     </Col>
                 </Row>
             </Container>
