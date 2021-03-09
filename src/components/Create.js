@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 const Create = (props) => {
     const [promptA, setPromptA] = useState("");
@@ -13,10 +15,25 @@ const Create = (props) => {
     }
 
     useEffect(() => {
-        if (hasEditedDesc) return;
+        if (hasEditedDesc || (!promptA || !promptB)) return;
         const shorten = (str) => str.split(" ").slice(0, 3).join(" ");
         setDesc(`${shorten(promptA)} vs. ${shorten(promptB)}`)
     });
+
+    const submit = () => {
+        axios({
+            method: 'post',
+            url: '/api/optionpairs/',
+            data: {
+                desc: desc,
+                promptA: promptA,
+                promptB: promptB
+            }
+        }).then((res) => {
+            //useHistory().push("/wudya/#")
+            console.log(res)
+        });
+    }
 
     return (
         <Container>
@@ -33,10 +50,10 @@ const Create = (props) => {
                 </FormGroup>
                 <FormGroup>
                     <Label for="shortDesc">Short description</Label>
-                    <Input type="text" name="prompt_a" id="shortDesc" placeholder="Thing vs Thang"
+                    <Input type="text" name="desc" id="shortDesc" placeholder={desc}
                         onInput={handleDesc} />
                 </FormGroup>
-                <Button>Submit</Button>
+                <Button onClick={submit}>Submit</Button>
             </Form>
         </Container>
     );

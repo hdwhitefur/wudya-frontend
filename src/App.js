@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
 import Create from './components/Create';
 import Home from './components/Home';
 import About from './components/About';
+import Wudya from './components/Wudya';
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 class App extends Component {
   constructor(props) {
@@ -43,6 +43,9 @@ class App extends Component {
           </Route>
           <Route path="/create">
             <Create />
+          </Route>
+          <Route path="/wudya/:id">
+            <Wudya />
           </Route>
           <Route path="/">
             <Home />
