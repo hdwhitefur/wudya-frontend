@@ -44,9 +44,6 @@ class App extends Component {
           <Route path="/create">
             <Create />
           </Route>
-          <Route path="/wudya/:id/results">
-            <WudyaResults />
-          </Route>
           <Route path="/wudya/:id">
             <Wudya />
           </Route>

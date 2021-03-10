@@ -1,20 +1,21 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Container, Button, Jumbotron, Row, Col } from 'reactstrap';
-import { useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useParams, useRouteMatch, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import WudyaVote from './WudyaVote';
+import WudyaResults from './WudyaResults';
 
 const Wudya = (props) => {
     const [optionPair, setOptionPair] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const [redirect, fireRedirect] = useState(false);
     const { id } = useParams();
 
+    let { path, url } = useRouteMatch();
+
     useEffect(() => {
-        axios.get("/api/optionpairs/" + id)
-            .then((res) => {
-                setOptionPair(res.data);
-                setLoaded(true);
-            })
-            .catch((err) => console.log(err));
+        update();
+        console.log(`${url}/detail`);
     }, []);
 
     const vote = (votes) => {
@@ -26,29 +27,41 @@ const Wudya = (props) => {
                 new_votes_b: votes[1]
             }
         }).then((res) => {
-            //useHistory().push("/wudya/#/results")
             console.log(res)
+            fireRedirect(true);
         });
     }
 
+    const update = () => {
+        axios.get(`/api/optionpairs/${id}`).then((res) => {
+            setOptionPair(res.data);
+            setLoaded(true);
+        }).catch((err) => console.log(err));
+    }
+
+    const sw = () => {
+        console.log(optionPair);
+        fireRedirect(true);
+    }
+
+    if (redirect) {
+        return (<Redirect to={`${url}/detail`} />)
+    }
     return (
-        <Jumbotron>
-            <Container>
-                <Row>
-                    <Col xs="3">
-                        <Button onClick={() => vote([1, 0])}>
-                            {loaded ? optionPair.prompt_a.prompt : ""}
-                        </Button>
-                    </Col>
-                    <Col xs="auto">vs.</Col>
-                    <Col xs="3">
-                        <Button onClick={() => vote([0, 1])}>
-                            {loaded ? optionPair.prompt_b.prompt : ""}
-                        </Button>
-                    </Col>
-                </Row>
-            </Container>
-        </Jumbotron>
+        <Router>
+            <Switch>
+                <Route path={`${url}/detail`}>
+                    {loaded ? <WudyaResults promptA={optionPair.prompt_a.prompt} votesA={optionPair.votes_a}
+                        promptB={optionPair.prompt_b.prompt} votesB={optionPair.votes_b}
+                        redirect={redirect} id={id} sw={sw} /> : ""}
+                </Route>
+                <Route path="/">
+                    {loaded ? <WudyaVote promptA={optionPair.prompt_a.prompt}
+                        promptB={optionPair.prompt_b.prompt}
+                        redirect={redirect} id={id} sw={sw} /> : ""}
+                </Route>
+            </Switch>
+        </Router>
     );
 }
 
