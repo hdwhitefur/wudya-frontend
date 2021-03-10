@@ -17,17 +17,13 @@ const Wudya = (props) => {
             .catch((err) => console.log(err));
     }, []);
 
-    //Bad, should be handled on backend rather than providing new vote count
     const vote = (votes) => {
         axios({
             method: 'put',
-            url: `/api/optionpairs/${optionPair.id}/`,
+            url: `/api/vote/${optionPair.id}/`,
             data: {
-                desc: optionPair.desc,
-                prompt_a: optionPair.prompt_a,
-                prompt_b: optionPair.prompt_b,
-                votes_a: optionPair.votes_a + votes[0],
-                votes_b: optionPair.votes_b + votes[1]
+                new_votes_a: votes[0],
+                new_votes_b: votes[1]
             }
         }).then((res) => {
             //useHistory().push("/wudya/#/results")
