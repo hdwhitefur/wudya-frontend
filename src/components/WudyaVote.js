@@ -7,13 +7,13 @@ const WudyaVote = (props) => {
             <Container>
                 <Row>
                     <Col xs="3">
-                        <Button onClick={() => props.vote([1,0])}>
+                        <Button style={{width: "100%"}} color="primary" onClick={() => props.vote([1,0])}>
                             {props.promptA}
                         </Button>
                     </Col>
-                    <Col xs="auto">vs.</Col>
+                    <Col style={{textAlign: "center"}} xs="1">vs.</Col>
                     <Col xs="3">
-                        <Button onClick={() => props.vote([0,1])}>
+                        <Button style={{width: "100%"}} color="secondary" onClick={() => props.vote([0,1])}>
                             {props.promptB}
                         </Button>
                     </Col>
