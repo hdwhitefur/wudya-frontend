@@ -27,7 +27,6 @@ const Create = (props) => {
             prompt_a: {prompt: promptA},
             prompt_b: {prompt: promptB}
         }).then((res) => {
-            console.log(res);
             fireRedirect(res.data.id);
         })};
 

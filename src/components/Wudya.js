@@ -1,5 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Container, Button, Jumbotron, Row, Col } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, useParams, useRouteMatch, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import WudyaVote from './WudyaVote';
@@ -10,13 +9,15 @@ const Wudya = (props) => {
     const [loaded, setLoaded] = useState(false);
     const [redirect, fireRedirect] = useState(false);
     const { id } = useParams();
-
-    let { path, url } = useRouteMatch();
+    const { url } = useRouteMatch();
 
     useEffect(() => {
         update();
-        console.log(`${url}/detail`);
     }, []);
+
+    useEffect(() => {
+        fireRedirect(false);
+    }, [redirect])
 
     const vote = (votes) => {
         axios({
@@ -27,8 +28,8 @@ const Wudya = (props) => {
                 new_votes_b: votes[1]
             }
         }).then((res) => {
-            console.log(res)
             fireRedirect(true);
+            update();
         });
     }
 
@@ -37,11 +38,6 @@ const Wudya = (props) => {
             setOptionPair(res.data);
             setLoaded(true);
         }).catch((err) => console.log(err));
-    }
-
-    const sw = () => {
-        console.log(optionPair);
-        fireRedirect(true);
     }
 
     if (redirect) {
@@ -53,12 +49,12 @@ const Wudya = (props) => {
                 <Route path={`${url}/detail`}>
                     {loaded ? <WudyaResults promptA={optionPair.prompt_a.prompt} votesA={optionPair.votes_a}
                         promptB={optionPair.prompt_b.prompt} votesB={optionPair.votes_b}
-                        redirect={redirect} id={id} sw={sw} /> : ""}
+                        redirect={redirect} id={id} vote={vote} /> : ""}
                 </Route>
                 <Route path="/">
                     {loaded ? <WudyaVote promptA={optionPair.prompt_a.prompt}
                         promptB={optionPair.prompt_b.prompt}
-                        redirect={redirect} id={id} sw={sw} /> : ""}
+                        redirect={redirect} id={id} vote={vote} /> : ""}
                 </Route>
             </Switch>
         </Router>

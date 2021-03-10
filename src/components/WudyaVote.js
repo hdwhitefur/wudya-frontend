@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Container, Button, Jumbotron, Row, Col } from 'reactstrap';
 
 const WudyaVote = (props) => {
@@ -7,13 +7,13 @@ const WudyaVote = (props) => {
             <Container>
                 <Row>
                     <Col xs="3">
-                        <Button onClick={() => props.sw()}>
+                        <Button onClick={() => props.vote([1,0])}>
                             {props.promptA}
                         </Button>
                     </Col>
                     <Col xs="auto">vs.</Col>
                     <Col xs="3">
-                        <Button onClick={() => props.sw()}>
+                        <Button onClick={() => props.vote([0,1])}>
                             {props.promptB}
                         </Button>
                     </Col>
